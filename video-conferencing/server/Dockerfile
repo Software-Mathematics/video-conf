@@ -1,1 +1,2 @@
-From node:16
+FROM node:16
+CMD ["node server.js"]
