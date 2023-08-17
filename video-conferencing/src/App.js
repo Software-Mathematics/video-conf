@@ -219,7 +219,7 @@ function endCall() {
 }
 
   useEffect(() => {
-    const socket = io('http://localhost:3001'); 
+    const socket = io('http://45.130.104.65:9179/'); 
     setSocket(socket);
 
     socket.on('initMessages', (initMessages) => {
