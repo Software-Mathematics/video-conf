@@ -24,7 +24,7 @@ function App() {
   const [isMicrophonePaused, setIsMicrophonePaused] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [peerConnection, setPeerConnection] = useState(null);
+  // const [peerConnection, setPeerConnection] = useState(null);
 
   function createRoom(roomId) {
     console.log("Creating Room");
@@ -238,76 +238,76 @@ function endCall() {
       socket.disconnect();
     };
 
-    getUserMedia(
-      { video: true, audio: true },
-      (stream) => {
-        local_stream = stream;
-        setLocalStream(local_stream);
+    // getUserMedia(
+    //   { video: true, audio: true },
+    //   (stream) => {
+    //     local_stream = stream;
+    //     setLocalStream(local_stream);
   
-        if (isMicrophonePaused) {
-          stream.getAudioTracks().forEach((track) => {
-            track.enabled = false; 
-          });
-        }
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-    if (local_stream) {
-      const peerConnection = new RTCPeerConnection({
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun.example.com:3478' }, 
-          { urls: 'stun:stun.services.mozilla.com' }, 
-        ],
-      });
+    //     if (isMicrophonePaused) {
+    //       stream.getAudioTracks().forEach((track) => {
+    //         track.enabled = false; 
+    //       });
+    //     }
+    //   },
+    //   (err) => {
+    //     console.log(err);
+    //   }
+    // );
+    // if (local_stream) {
+    //   const peerConnection = new RTCPeerConnection({
+    //     iceServers: [
+    //       { urls: 'stun:stun.l.google.com:19302' },
+    //       { urls: 'stun:stun.example.com:3478' }, 
+    //       { urls: 'stun:stun.services.mozilla.com' }, 
+    //     ],
+    //   });
 
-      local_stream.getTracks().forEach((track) => {
-        peerConnection.addTrack(track, local_stream);
-      });
+    //   local_stream.getTracks().forEach((track) => {
+    //     peerConnection.addTrack(track, local_stream);
+    //   });
 
-      peerConnection.createOffer()
-        .then((offer) => {
-          return peerConnection.setLocalDescription(offer);
-        })
-        .then(() => {
-          socket.emit('offer', peerConnection.localDescription);
-        });
+    //   peerConnection.createOffer()
+    //     .then((offer) => {
+    //       return peerConnection.setLocalDescription(offer);
+    //     })
+    //     .then(() => {
+    //       socket.emit('offer', peerConnection.localDescription);
+    //     });
 
-      socket.on('offer', (offer) => {
-        peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-        peerConnection.createAnswer()
-          .then((answer) => {
-            return peerConnection.setLocalDescription(answer);
-          })
-          .then(() => {
-            socket.emit('answer', peerConnection.localDescription);
-          });
-      });
+    //   socket.on('offer', (offer) => {
+    //     peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    //     peerConnection.createAnswer()
+    //       .then((answer) => {
+    //         return peerConnection.setLocalDescription(answer);
+    //       })
+    //       .then(() => {
+    //         socket.emit('answer', peerConnection.localDescription);
+    //       });
+    //   });
 
-      socket.on('answer', (answer) => {
-        peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-      });
+    //   socket.on('answer', (answer) => {
+    //     peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+    //   });
 
-      socket.on('iceCandidate', (candidate) => {
-        peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-      });
+    //   socket.on('iceCandidate', (candidate) => {
+    //     peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    //   });
 
-      peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-          socket.emit('iceCandidate', event.candidate);
-        }
-      };
+    //   peerConnection.onicecandidate = (event) => {
+    //     if (event.candidate) {
+    //       socket.emit('iceCandidate', event.candidate);
+    //     }
+    //   };
 
-      peerConnection.ontrack = (event) => {
-        setRemoteStream(event.streams[0]);
-      };
-    }
+    //   peerConnection.ontrack = (event) => {
+    //     setRemoteStream(event.streams[0]);
+    //   };
+    // }
 
-    return () => {
-      socket.disconnect();
-    };
+    // return () => {
+    //   socket.disconnect();
+    // };
 
   }, []);
 
