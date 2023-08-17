@@ -1,3 +1,4 @@
 FROM node:16
-COPY . /app/
+WORKDIR /app
+COPY . .
 CMD ["npm install && node server.js"]
